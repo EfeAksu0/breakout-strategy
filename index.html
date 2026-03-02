@@ -1,15 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mastering the Breakout - Efe Trading</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Outfit:wght@300;600;800&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Outfit:wght@300;600;800&display=swap"
+        rel="stylesheet">
     <style>
         :root {
             --bg-color: #050505;
-            --accent-primary: #8b5cf6; /* Vibrant Purple */
-            --accent-secondary: #06b6d4; /* Cyan */
+            --accent-primary: #8b5cf6;
+            /* Vibrant Purple */
+            --accent-secondary: #06b6d4;
+            /* Cyan */
             --text-main: #f8fafc;
             --text-dim: #94a3b8;
             --success: #10b981;
@@ -86,7 +91,9 @@
         }
 
         @keyframes shine {
-            to { background-position: 200% center; }
+            to {
+                background-position: 200% center;
+            }
         }
 
         p {
@@ -108,7 +115,7 @@
             backdrop-filter: blur(20px);
             position: relative;
             overflow: hidden;
-            box-shadow: 0 40px 100px rgba(0,0,0,0.5);
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.5);
         }
 
         /* Chart Elements */
@@ -153,14 +160,14 @@
         /* Floating Cards */
         .floating-card {
             position: absolute;
-            background: rgba(255,255,255,0.05);
+            background: rgba(255, 255, 255, 0.05);
             padding: 20px 30px;
             border-radius: 16px;
             border: 1px solid var(--border);
             backdrop-filter: blur(10px);
             font-weight: 700;
             font-size: 1.2rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             opacity: 0;
             transform: translateY(20px);
             transition: all 0.6s ease;
@@ -178,7 +185,7 @@
             left: 0;
             width: 100%;
             height: 6px;
-            background: rgba(255,255,255,0.05);
+            background: rgba(255, 255, 255, 0.05);
         }
 
         #progress-bar {
@@ -202,8 +209,13 @@
         }
 
         @keyframes float {
-            0% { transform: translate(-20%, -20%); }
-            100% { transform: translate(20%, 20%); }
+            0% {
+                transform: translate(-20%, -20%);
+            }
+
+            100% {
+                transform: translate(20%, 20%);
+            }
         }
 
         /* Intro Profile Circle */
@@ -223,8 +235,17 @@
         }
 
         @keyframes pulse {
-            0%, 100% { transform: scale(1); box-shadow: 0 0 50px rgba(139, 92, 246, 0.3); }
-            50% { transform: scale(1.05); box-shadow: 0 0 80px rgba(139, 92, 246, 0.5); }
+
+            0%,
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 50px rgba(139, 92, 246, 0.3);
+            }
+
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 0 80px rgba(139, 92, 246, 0.5);
+            }
         }
 
         /* CTA Button */
@@ -249,7 +270,10 @@
         /* Start Button overlay */
         #overlay {
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             background: var(--bg-color);
             z-index: 1000;
             display: flex;
@@ -268,10 +292,14 @@
             cursor: pointer;
             transition: all 0.3s;
         }
-        .start-btn:hover { background: var(--accent-primary); box-shadow: 0 0 50px var(--accent-primary); }
 
+        .start-btn:hover {
+            background: var(--accent-primary);
+            box-shadow: 0 0 50px var(--accent-primary);
+        }
     </style>
 </head>
+
 <body>
     <div class="bg-glow"></div>
     <div id="overlay">
@@ -283,7 +311,8 @@
         <div class="scene" id="scene-1">
             <div class="profile-circle">E</div>
             <h1 class="gradient-text">I'm Efe.</h1>
-            <p>I don't play the markets. I master them.<br>After years of testing, I've refined the single most powerful strategy in trading.</p>
+            <p>I don't play the markets. I master them.<br>After years of testing, I've refined the single most powerful
+                strategy in trading.</p>
         </div>
 
         <!-- Scene 2: The Logic (15-45s) -->
@@ -293,7 +322,7 @@
                 <svg class="chart-canvas" id="chart-svg" viewBox="0 0 1000 500">
                     <line x1="100" y1="150" x2="900" y2="150" class="level-line" id="resistance-line" />
                     <text x="110" y="140" class="level-label" id="resistance-label">RESISTANCE</text>
-                    
+
                     <line x1="100" y1="350" x2="900" y2="350" class="level-line" id="support-line" />
                     <text x="110" y="370" class="level-label" id="support-label">SUPPORT</text>
 
@@ -301,7 +330,8 @@
                     <circle cx="0" cy="0" r="10" class="breakout-point" id="breakout-point" />
                 </svg>
                 <div class="floating-card active" style="top: 20px; left: 20px;" id="card-1">1. Accumulation Phase</div>
-                <div class="floating-card" style="bottom: 80px; right: 20px;" id="card-2">2. Massive Volatility Spike</div>
+                <div class="floating-card" style="bottom: 80px; right: 20px;" id="card-2">2. Massive Volatility Spike
+                </div>
             </div>
             <p>We wait for the pressure to build. When the level snaps, the profit follows.</p>
         </div>
@@ -310,7 +340,8 @@
         <div class="scene" id="scene-3">
             <h1>Precision Execution</h1>
             <div class="visual-container">
-                <div style="display: flex; width: 100%; height: 100%; justify-content: space-around; align-items: center; padding: 50px;">
+                <div
+                    style="display: flex; width: 100%; height: 100%; justify-content: space-around; align-items: center; padding: 50px;">
                     <div class="feature-card" style="text-align: left;">
                         <h2 style="color: var(--accent-secondary); font-size: 2.5rem; margin-bottom: 20px;">ENTRY</h2>
                         <ul style="color: var(--text-dim); font-size: 1.5rem; list-style: none;">
@@ -319,7 +350,8 @@
                             <li style="margin-bottom: 15px;">✓ Momentum Shift</li>
                         </ul>
                     </div>
-                    <div class="feature-card" style="text-align: left; border-left: 2px solid var(--border); padding-left: 50px;">
+                    <div class="feature-card"
+                        style="text-align: left; border-left: 2px solid var(--border); padding-left: 50px;">
                         <h2 style="color: var(--danger); font-size: 2.5rem; margin-bottom: 20px;">RISK</h2>
                         <ul style="color: var(--text-dim); font-size: 1.5rem; list-style: none;">
                             <li style="margin-bottom: 15px;">✕ No FOMO Entries</li>
@@ -335,9 +367,11 @@
         <!-- Scene 4: Call to Action (75-90s) -->
         <div class="scene" id="scene-4">
             <h1 class="gradient-text">Ready to Master It?</h1>
-            <p>I'm opening a limited number of spots for my inner circle.<br>Learn the exact mechanics behind these breakout moves.</p>
+            <p>I'm opening a limited number of spots for my inner circle.<br>Learn the exact mechanics behind these
+                breakout moves.</p>
             <button class="cta-button">JOIN THE COURSE</button>
-            <p style="margin-top: 30px; font-size: 1.2rem; color: var(--accent-secondary);">Only 12 seats left for March cohort.</p>
+            <p style="margin-top: 30px; font-size: 1.2rem; color: var(--accent-secondary);">Only 12 seats left for March
+                cohort.</p>
         </div>
     </div>
 
@@ -347,14 +381,14 @@
 
     <script>
         let currentScene = 0;
-        const totalDuration = 90000; // 90 seconds
+        const totalDuration = 45000; // 45 seconds total
         let startTime;
 
         const scenes = [
-            { id: 'scene-1', duration: 15000 },
-            { id: 'scene-2', duration: 30000 },
-            { id: 'scene-3', duration: 30000 },
-            { id: 'scene-4', duration: 15000 }
+            { id: 'scene-1', duration: 8000 },
+            { id: 'scene-2', duration: 15000 },
+            { id: 'scene-3', duration: 12000 },
+            { id: 'scene-4', duration: 10000 }
         ];
 
         function startVideo() {
@@ -367,10 +401,10 @@
         function playScene(index) {
             document.querySelectorAll('.scene').forEach(s => s.classList.remove('active'));
             document.getElementById(scenes[index].id).classList.add('active');
-            
-            if(index === 1) animateChart();
-            
-            if(index < scenes.length - 1) {
+
+            if (index === 1) animateChart();
+
+            if (index < scenes.length - 1) {
                 setTimeout(() => playScene(index + 1), scenes[index].duration);
             }
         }
@@ -379,7 +413,7 @@
             const elapsed = Date.now() - startTime;
             const progress = (elapsed / totalDuration) * 100;
             document.getElementById('progress-bar').style.width = Math.min(progress, 100) + '%';
-            
+
             if (progress < 100) {
                 requestAnimationFrame(update);
             }
@@ -389,44 +423,45 @@
             const path = document.getElementById('price-track');
             const breakout = document.getElementById('breakout-point');
             const card2 = document.getElementById('card-2');
-            
+
             // Generate oscillating price data
             let d = "M 100 250 ";
-            for(let i=1; i<25; i++) {
+            for (let i = 1; i < 25; i++) {
                 let x = 100 + (i * 30);
                 let y = 250 + Math.sin(i * 0.8) * 80;
                 d += `L ${x} ${y} `;
             }
-            
+
             // Breakout move
             let lastX = 100 + (24 * 30);
             let breakoutX = lastX + 100;
-            let breakoutY = 100; 
+            let breakoutY = 100;
             d += `L ${breakoutX} 150 L ${breakoutX + 50} ${breakoutY} L ${breakoutX + 100} ${breakoutY - 50}`;
-            
+
             path.setAttribute('d', d);
             const length = path.getTotalLength();
             path.style.strokeDasharray = length;
             path.style.strokeDashoffset = length;
-            
-            // Animate line drawing
+
+            // Animate line drawing (Faster: 8s instead of 20s)
             let animation = path.animate([
                 { strokeDashoffset: length },
                 { strokeDashoffset: 0 }
             ], {
-                duration: 20000,
+                duration: 8000,
                 easing: 'linear'
             });
 
-            // Timed reveals
+            // Timed reveals (Faster: 7s instead of 18s)
             setTimeout(() => {
                 breakout.setAttribute('cx', breakoutX);
                 breakout.setAttribute('cy', 150);
                 breakout.classList.add('show');
                 card2.classList.add('active');
-            }, 18000);
+            }, 7000);
         }
 
     </script>
 </body>
+
 </html>
