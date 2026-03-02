@@ -36,6 +36,7 @@
             overflow: hidden;
             width: 100vw;
             height: 100vh;
+            height: 100dvh;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -108,8 +109,9 @@
         .visual-container {
             width: 100%;
             max-width: 1000px;
-            height: 500px;
-            margin: 40px 0;
+            height: 50vh;
+            max-height: 500px;
+            margin: 20px 0;
             background: var(--glass);
             border: 1px solid var(--border);
             border-radius: 32px;
@@ -117,6 +119,7 @@
             position: relative;
             overflow: hidden;
             box-shadow: 0 40px 100px rgba(0, 0, 0, 0.5);
+            flex-shrink: 1;
         }
 
         /* Chart Elements */
@@ -373,16 +376,57 @@
         /* Small Mobile */
         @media (max-width: 480px) {
             h1 {
-                font-size: 2.2rem;
+                font-size: 2rem;
+            }
+
+            p {
+                font-size: 1rem;
             }
 
             .visual-container {
-                height: 300px;
+                height: 35vh;
+                max-height: 250px;
+                margin: 15px 0;
             }
 
             .start-btn {
-                padding: 1.5rem 3rem;
+                padding: 1.2rem 2.5rem;
+                font-size: 1.2rem;
+            }
+
+            .profile-circle {
+                width: 100px;
+                height: 100px;
+                margin-bottom: 20px;
+            }
+        }
+
+        /* Landscape / Tight Viewports */
+        @media (max-height: 600px) {
+            h1 {
                 font-size: 1.5rem;
+                margin-bottom: 10px;
+            }
+
+            p {
+                font-size: 0.9rem;
+            }
+
+            .visual-container {
+                height: 30vh;
+                margin: 10px 0;
+            }
+
+            .profile-circle {
+                width: 80px;
+                height: 80px;
+                margin-bottom: 10px;
+            }
+
+            .cta-button {
+                margin-top: 10px;
+                padding: 10px 20px;
+                font-size: 1.1rem;
             }
         }
     </style>
