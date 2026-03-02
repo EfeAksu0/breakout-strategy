@@ -85,6 +85,7 @@
         .gradient-text {
             background: linear-gradient(135deg, #fff 0%, var(--accent-primary) 50%, var(--accent-secondary) 100%);
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
             background-size: 200% auto;
             animation: shine 5s linear infinite;
@@ -296,6 +297,93 @@
         .start-btn:hover {
             background: var(--accent-primary);
             box-shadow: 0 0 50px var(--accent-primary);
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.8rem;
+                letter-spacing: -1px;
+            }
+
+            p {
+                font-size: 1.1rem;
+                padding: 0 10px;
+            }
+
+            .visual-container {
+                height: 350px;
+                margin: 20px 0;
+                border-radius: 20px;
+            }
+
+            .profile-circle {
+                width: 120px;
+                height: 120px;
+                font-size: 3rem;
+            }
+
+            .cta-button {
+                padding: 15px 30px;
+                font-size: 1.4rem;
+                margin-top: 20px;
+            }
+
+            .floating-card {
+                padding: 10px 15px;
+                font-size: 0.9rem;
+            }
+
+            /* Scene 3 Mobile Layout */
+            #scene-3 .visual-container>div {
+                flex-direction: column !important;
+                padding: 20px !important;
+                justify-content: center !important;
+            }
+
+            .feature-card {
+                padding-left: 0 !important;
+                border-left: none !important;
+                border-bottom: 1px solid var(--border);
+                padding-bottom: 20px;
+                margin-bottom: 20px;
+                width: 100%;
+            }
+
+            .feature-card:last-child {
+                border-bottom: none;
+                margin-bottom: 0;
+                padding-bottom: 0;
+            }
+
+            .feature-card h2 {
+                font-size: 1.8rem !important;
+                margin-bottom: 10px !important;
+            }
+
+            .feature-card ul {
+                font-size: 1rem !important;
+            }
+
+            .feature-card li {
+                margin-bottom: 8px !important;
+            }
+        }
+
+        /* Small Mobile */
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            .visual-container {
+                height: 300px;
+            }
+
+            .start-btn {
+                padding: 1.5rem 3rem;
+                font-size: 1.5rem;
+            }
         }
     </style>
 </head>
