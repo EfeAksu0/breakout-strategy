@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mastering the Breakout - Efe Trading</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Outfit:wght@300;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #050505;
+            --accent-primary: #8b5cf6; /* Vibrant Purple */
+            --accent-secondary: #06b6d4; /* Cyan */
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
+            --success: #10b981;
+            --danger: #ef4444;
+            --glass: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.07);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Outfit', sans-serif;
+            overflow: hidden;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Video Stage */
+        #stage {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Scenes */
+        .scene {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.8s ease, visibility 0.8s;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .scene.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Typography */
+        h1 {
+            font-size: 5rem;
+            font-weight: 800;
+            line-height: 1;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: -2px;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #fff 0%, var(--accent-primary) 50%, var(--accent-secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 200% auto;
+            animation: shine 5s linear infinite;
+        }
+
+        @keyframes shine {
+            to { background-position: 200% center; }
+        }
+
+        p {
+            font-size: 1.5rem;
+            color: var(--text-dim);
+            max-width: 800px;
+            line-height: 1.6;
+        }
+
+        /* Visuals */
+        .visual-container {
+            width: 100%;
+            max-width: 1000px;
+            height: 500px;
+            margin: 40px 0;
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: 32px;
+            backdrop-filter: blur(20px);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.5);
+        }
+
+        /* Chart Elements */
+        .chart-canvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        .price-line {
+            stroke: var(--accent-secondary);
+            stroke-width: 3;
+            fill: none;
+            filter: drop-shadow(0 0 8px var(--accent-secondary));
+        }
+
+        .level-line {
+            stroke: var(--text-dim);
+            stroke-width: 2;
+            stroke-dasharray: 8 8;
+            opacity: 0.5;
+        }
+
+        .level-label {
+            fill: var(--text-dim);
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .breakout-point {
+            fill: var(--success);
+            filter: drop-shadow(0 0 15px var(--success));
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .breakout-point.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Floating Cards */
+        .floating-card {
+            position: absolute;
+            background: rgba(255,255,255,0.05);
+            padding: 20px 30px;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            backdrop-filter: blur(10px);
+            font-weight: 700;
+            font-size: 1.2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease;
+        }
+
+        .floating-card.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Progress Bar */
+        #progress-container {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: rgba(255,255,255,0.05);
+        }
+
+        #progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+            transition: width 0.1s linear;
+        }
+
+        /* Animated Background Particles */
+        .bg-glow {
+            position: fixed;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--accent-primary) 0%, transparent 70%);
+            opacity: 0.05;
+            filter: blur(80px);
+            z-index: -1;
+            animation: float 20s infinite alternate;
+        }
+
+        @keyframes float {
+            0% { transform: translate(-20%, -20%); }
+            100% { transform: translate(20%, 20%); }
+        }
+
+        /* Intro Profile Circle */
+        .profile-circle {
+            width: 180px;
+            height: 180px;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border-radius: 50%;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 4rem;
+            color: white;
+            box-shadow: 0 0 50px rgba(139, 92, 246, 0.3);
+            animation: pulse 2s infinite ease-in-out;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 50px rgba(139, 92, 246, 0.3); }
+            50% { transform: scale(1.05); box-shadow: 0 0 80px rgba(139, 92, 246, 0.5); }
+        }
+
+        /* CTA Button */
+        .cta-button {
+            margin-top: 40px;
+            padding: 20px 50px;
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border: none;
+            border-radius: 16px;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(6, 182, 212, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .cta-button:hover {
+            transform: scale(1.05);
+        }
+
+        /* Start Button overlay */
+        #overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg-color);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .start-btn {
+            background: transparent;
+            border: 2px solid var(--accent-primary);
+            color: white;
+            padding: 2.5rem 5rem;
+            font-size: 2rem;
+            font-weight: 800;
+            border-radius: 100px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .start-btn:hover { background: var(--accent-primary); box-shadow: 0 0 50px var(--accent-primary); }
+
+    </style>
+</head>
+<body>
+    <div class="bg-glow"></div>
+    <div id="overlay">
+        <button class="start-btn" onclick="startVideo()">START PRESENTATION</button>
+    </div>
+
+    <div id="stage">
+        <!-- Scene 1: Introduction (0-15s) -->
+        <div class="scene" id="scene-1">
+            <div class="profile-circle">E</div>
+            <h1 class="gradient-text">I'm Efe.</h1>
+            <p>I don't play the markets. I master them.<br>After years of testing, I've refined the single most powerful strategy in trading.</p>
+        </div>
+
+        <!-- Scene 2: The Logic (15-45s) -->
+        <div class="scene" id="scene-2">
+            <h1>The Breakout Strategy</h1>
+            <div class="visual-container">
+                <svg class="chart-canvas" id="chart-svg" viewBox="0 0 1000 500">
+                    <line x1="100" y1="150" x2="900" y2="150" class="level-line" id="resistance-line" />
+                    <text x="110" y="140" class="level-label" id="resistance-label">RESISTANCE</text>
+                    
+                    <line x1="100" y1="350" x2="900" y2="350" class="level-line" id="support-line" />
+                    <text x="110" y="370" class="level-label" id="support-label">SUPPORT</text>
+
+                    <path class="price-line" id="price-track" d="" />
+                    <circle cx="0" cy="0" r="10" class="breakout-point" id="breakout-point" />
+                </svg>
+                <div class="floating-card active" style="top: 20px; left: 20px;" id="card-1">1. Accumulation Phase</div>
+                <div class="floating-card" style="bottom: 80px; right: 20px;" id="card-2">2. Massive Volatility Spike</div>
+            </div>
+            <p>We wait for the pressure to build. When the level snaps, the profit follows.</p>
+        </div>
+
+        <!-- Scene 3: Execution (45-75s) -->
+        <div class="scene" id="scene-3">
+            <h1>Precision Execution</h1>
+            <div class="visual-container">
+                <div style="display: flex; width: 100%; height: 100%; justify-content: space-around; align-items: center; padding: 50px;">
+                    <div class="feature-card" style="text-align: left;">
+                        <h2 style="color: var(--accent-secondary); font-size: 2.5rem; margin-bottom: 20px;">ENTRY</h2>
+                        <ul style="color: var(--text-dim); font-size: 1.5rem; list-style: none;">
+                            <li style="margin-bottom: 15px;">✓ Volume Confirmation</li>
+                            <li style="margin-bottom: 15px;">✓ Retest of Level</li>
+                            <li style="margin-bottom: 15px;">✓ Momentum Shift</li>
+                        </ul>
+                    </div>
+                    <div class="feature-card" style="text-align: left; border-left: 2px solid var(--border); padding-left: 50px;">
+                        <h2 style="color: var(--danger); font-size: 2.5rem; margin-bottom: 20px;">RISK</h2>
+                        <ul style="color: var(--text-dim); font-size: 1.5rem; list-style: none;">
+                            <li style="margin-bottom: 15px;">✕ No FOMO Entries</li>
+                            <li style="margin-bottom: 15px;">✕ Proper Stop Placement</li>
+                            <li style="margin-bottom: 15px;">✕ 1:3 RR Ratio</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <p>Strategy is only 20%. Execution and Discipline are the other 80%.</p>
+        </div>
+
+        <!-- Scene 4: Call to Action (75-90s) -->
+        <div class="scene" id="scene-4">
+            <h1 class="gradient-text">Ready to Master It?</h1>
+            <p>I'm opening a limited number of spots for my inner circle.<br>Learn the exact mechanics behind these breakout moves.</p>
+            <button class="cta-button">JOIN THE COURSE</button>
+            <p style="margin-top: 30px; font-size: 1.2rem; color: var(--accent-secondary);">Only 12 seats left for March cohort.</p>
+        </div>
+    </div>
+
+    <div id="progress-container">
+        <div id="progress-bar"></div>
+    </div>
+
+    <script>
+        let currentScene = 0;
+        const totalDuration = 90000; // 90 seconds
+        let startTime;
+
+        const scenes = [
+            { id: 'scene-1', duration: 15000 },
+            { id: 'scene-2', duration: 30000 },
+            { id: 'scene-3', duration: 30000 },
+            { id: 'scene-4', duration: 15000 }
+        ];
+
+        function startVideo() {
+            document.getElementById('overlay').style.display = 'none';
+            startTime = Date.now();
+            update();
+            playScene(0);
+        }
+
+        function playScene(index) {
+            document.querySelectorAll('.scene').forEach(s => s.classList.remove('active'));
+            document.getElementById(scenes[index].id).classList.add('active');
+            
+            if(index === 1) animateChart();
+            
+            if(index < scenes.length - 1) {
+                setTimeout(() => playScene(index + 1), scenes[index].duration);
+            }
+        }
+
+        function update() {
+            const elapsed = Date.now() - startTime;
+            const progress = (elapsed / totalDuration) * 100;
+            document.getElementById('progress-bar').style.width = Math.min(progress, 100) + '%';
+            
+            if (progress < 100) {
+                requestAnimationFrame(update);
+            }
+        }
+
+        function animateChart() {
+            const path = document.getElementById('price-track');
+            const breakout = document.getElementById('breakout-point');
+            const card2 = document.getElementById('card-2');
+            
+            // Generate oscillating price data
+            let d = "M 100 250 ";
+            for(let i=1; i<25; i++) {
+                let x = 100 + (i * 30);
+                let y = 250 + Math.sin(i * 0.8) * 80;
+                d += `L ${x} ${y} `;
+            }
+            
+            // Breakout move
+            let lastX = 100 + (24 * 30);
+            let breakoutX = lastX + 100;
+            let breakoutY = 100; 
+            d += `L ${breakoutX} 150 L ${breakoutX + 50} ${breakoutY} L ${breakoutX + 100} ${breakoutY - 50}`;
+            
+            path.setAttribute('d', d);
+            const length = path.getTotalLength();
+            path.style.strokeDasharray = length;
+            path.style.strokeDashoffset = length;
+            
+            // Animate line drawing
+            let animation = path.animate([
+                { strokeDashoffset: length },
+                { strokeDashoffset: 0 }
+            ], {
+                duration: 20000,
+                easing: 'linear'
+            });
+
+            // Timed reveals
+            setTimeout(() => {
+                breakout.setAttribute('cx', breakoutX);
+                breakout.setAttribute('cy', 150);
+                breakout.classList.add('show');
+                card2.classList.add('active');
+            }, 18000);
+        }
+
+    </script>
+</body>
+</html>
